@@ -125,8 +125,68 @@ class Rectangle(Section):
         return self.Zp_x
 
     def zp_y(self):
-        self.Zp_y = self.Length * self.Breadth ** 2 / 4
+        self.Zp_y = self.Breadth * self.Length ** 2 / 4
         return self.Zp_y
 
 
-0
+class RH_triangle(Section):
+
+    def __init__(self, base, height, angle):
+        super(RH_triangle, self).__init__()
+        self.Base = base
+        self.Height = height
+        self.Angle = angle
+
+    def __repr__(self):
+        repr = "RH_triangle\n"
+        repr += "Base: {}\n".format(self.Base)
+        repr += "Height: {}\n".format(self.Height)
+        repr += "Angle: {}\n".format(self.Angle)
+        repr += super(RH_triangle, self).__repr__()
+        return repr
+
+    def centroid(self):
+        self.Centroid = ((self.Base + (self.Height / math.tan(self.Angle)))/3, self.Height/3)
+        return self.Centroid
+
+    def area(self):
+        self.Area = self.Base * self.Height / 2
+        return self.Area
+
+    def i_x(self):
+        self.I_x = self.Base * self.Height**3 / 36
+        return self.I_x
+
+    def i_y(self):
+        b = self.Base
+        h = self.Height
+        a = self.Height / math.tan(self.Angle)
+        self.I_y = (b**3 * h - b**2 * h * a + b * h * a**2)/36
+        return self.I_y
+
+    def r_x(self):
+        self.R_x = math.sqrt(self.i_x()/self.area())
+        return self.R_x
+
+    def r_y(self):
+        self.R_y = math.sqrt(self.i_y()/self.area())
+        return self.R_y
+
+    def ze_x(self):
+        self.Ze_x = 2 * self.i_x() / self.Breadth
+        return self.Ze_x
+
+    def ze_y(self):
+        self.Ze_y = 2 * self.i_y() / self.Length
+        return self.Ze_y
+
+    def zp_x(self):
+        self.Zp_x = self.Length * self.Breadth ** 2 / 4
+        return self.Zp_x
+
+    def zp_y(self):
+        self.Zp_y = self.Breadth * self.Length ** 2 / 4
+        return self.Zp_y
+
+
+
