@@ -10,3 +10,6 @@ print R1.i_x()
 print R1.i_y()
 print R1.r_x()
 print R1.r_y()
+print R1.ze_x()
+print R1.ze_y()
+print R1

@@ -21,7 +21,17 @@ class Section(object):
 
     @abc.abstractmethod
     def __repr__(self):
-        pass
+        repr = "Area: {}\n".format(self.Area)
+        repr += "Centroid: {}\n".format(self.Centroid)
+        repr += "I_x: {}\n".format(self.I_x)
+        repr += "I_y: {}\n".format(self.I_y)
+        repr += "R_x: {}\n".format(self.R_x)
+        repr += "R_y: {}\n".format(self.R_y)
+        repr += "Ze_x: {}\n".format(self.Ze_x)
+        repr += "Ze_y: {}\n".format(self.Ze_y)
+        repr += "Zp_x: {}\n".format(self.Zp_x)
+        repr += "Zp_y: {}\n".format(self.Zp_y)
+        return repr
 
     @abc.abstractmethod
     def centroid(self):
@@ -75,6 +85,7 @@ class Rectangle(Section):
         repr = "Rectangle\n"
         repr += "Length: {}\n".format(self.Length)
         repr += "Breadth: {}\n".format(self.Breadth)
+        repr += super(Rectangle, self).__repr__()
         return repr
 
     def centroid(self):
