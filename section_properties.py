@@ -8,16 +8,16 @@ class Section(object):
 
     @abc.abstractmethod
     def __init__(self):
-        self.area = None
-        self.centroid = (None, None)
-        self.i_x = None
-        self.i_y = None
-        self.r_x = None
-        self.r_y = None
-        self.ze_x = None
-        self.ze_y = None
-        self.zp_x = None
-        self.zp_y = None
+        self.Area = None
+        self.Centroid = (None, None)
+        self.I_x = None
+        self.I_y = None
+        self.R_x = None
+        self.R_y = None
+        self.Ze_x = None
+        self.Ze_y = None
+        self.Zp_x = None
+        self.Zp_y = None
 
     @abc.abstractmethod
     def __repr__(self):
@@ -68,46 +68,46 @@ class Rectangle(Section):
 
     def __init__(self, length, breadth):
         super(Rectangle, self).__init__()
-        self.length = length
-        self.breadth = breadth
+        self.Length = length
+        self.Breadth = breadth
 
     def __repr__(self):
         repr = "Rectangle\n"
-        repr += "Length: {}\n".format(self.length)
-        repr += "Breadth: {}\n".format(self.breadth)
+        repr += "Length: {}\n".format(self.Length)
+        repr += "Breadth: {}\n".format(self.Breadth)
         return repr
 
     def centroid(self):
-        super(Rectangle, self).centroid = (self.length/2, self.breadth/2)
-        return self.centroid
+        self.Centroid = (self.Length/2, self.Breadth/2)
+        return self.Centroid
 
     def area(self):
-        super(Rectangle, self).area = self.length * self.breadth
-        return self.area
+        self.Area = self.Length * self.Breadth
+        return self.Area
 
     def i_x(self):
-        super(Rectangle, self).i_x = self.length * self.breadth**3 /12
-        return self.i_x
+        self.I_x = self.Length * self.Breadth**3 / 12
+        return self.I_x
 
     def i_y(self):
-        super(Rectangle, self).i_y = self.breadth * self.length**3 /12
-        return self.i_y
+        self.I_y = self.Breadth * self.Length**3 /12
+        return self.I_y
 
     def r_x(self):
-        super(Rectangle, self).r_x = math.sqrt(self.i_x/self.area)
-        return self.r_x
+        self.R_x = math.sqrt(self.i_x()/self.area())
+        return self.R_x
 
     def r_y(self):
-        super(Rectangle, self).r_y = math.sqrt(self.i_y/self.area)
-        return self.r_y
+        self.R_y = math.sqrt(self.i_y()/self.area())
+        return self.R_y
 
     def ze_x(self):
-        super(Rectangle, self).ze_x = 2 * super(Rectangle, self).i_x / self.breadth
-        return self.r_x
+        self.Ze_x = 2 * self.i_x() / self.Breadth
+        return self.Ze_x
 
     def ze_y(self):
-        super(Rectangle, self).ze_y = 2 * super(Rectangle, self).i_y / self.length
-        return self.r_y
+        self.Ze_y = 2 * self.i_y() / self.Length
+        return self.Ze_y
 
     def zp_x(self):
         #TODO
@@ -116,3 +116,6 @@ class Rectangle(Section):
     def zp_y(self):
         #TODO
         pass
+
+
+0
