@@ -21,16 +21,16 @@ class Section(object):
 
     @abc.abstractmethod
     def __repr__(self):
-        repr = "Area: {}\n".format(self.Area)
-        repr += "Centroid: {}\n".format(self.Centroid)
-        repr += "I_x: {}\n".format(self.I_x)
-        repr += "I_y: {}\n".format(self.I_y)
-        repr += "R_x: {}\n".format(self.R_x)
-        repr += "R_y: {}\n".format(self.R_y)
-        repr += "Ze_x: {}\n".format(self.Ze_x)
-        repr += "Ze_y: {}\n".format(self.Ze_y)
-        repr += "Zp_x: {}\n".format(self.Zp_x)
-        repr += "Zp_y: {}\n".format(self.Zp_y)
+        repr = "Area: {}\n".format(self.area())
+        repr += "Centroid: {}\n".format(self.centroid())
+        repr += "I_x: {}\n".format(self.i_x())
+        repr += "I_y: {}\n".format(self.i_y())
+        repr += "R_x: {}\n".format(self.r_x())
+        repr += "R_y: {}\n".format(self.r_y())
+        repr += "Ze_x: {}\n".format(self.ze_x())
+        repr += "Ze_y: {}\n".format(self.ze_y())
+        repr += "Zp_x: {}\n".format(self.zp_x())
+        repr += "Zp_y: {}\n".format(self.zp_y())
         return repr
 
     @abc.abstractmethod
@@ -121,12 +121,12 @@ class Rectangle(Section):
         return self.Ze_y
 
     def zp_x(self):
-        #TODO
-        pass
+        self.Zp_x = self.Length * self.Breadth ** 2 / 4
+        return self.Zp_x
 
     def zp_y(self):
-        #TODO
-        pass
+        self.Zp_y = self.Length * self.Breadth ** 2 / 4
+        return self.Zp_y
 
 
 0
