@@ -3,6 +3,21 @@ import numpy as np
 import abc
 
 
+def parallel_axis_transform_i(i,area, d):
+    return i + area * d**2
+
+
+def rotational_transform_i(i_x, i_y, i_xy, phi):
+    i_u = (i_x + i_y)/2 + (i_x - i_y)/2 * math.cos(2*phi) - i_xy * math.sin(2*phi)
+    i_v = (i_x + i_y) / 2 - (i_x - i_y) / 2 * math.cos(2 * phi) + i_xy * math.sin(2 * phi)
+    return i_u, i_v
+
+
+def calc_centroid(areas, coordinates):
+    areas = np.array([areas])
+    coordinates = np.array([coordinates])
+    return sum(areas * coordinates)
+
 class Section(object):
     __metaclass__ = abc.ABCMeta
 
@@ -251,12 +266,18 @@ class Fillet(Sector, Triangle):
         return self.Area
 
     def i_x(self):
-        self.I_x = 2 * (self.Fillet_Triangle.i_x() + self.Fillet_Triangle.area() *self.Fillet_Triangle.centroid()[1]**2) - self.Fillet_Sector.i_x()
+        self.I_x = 2 * parallel_axis_transform_i(self.Fillet_Triangle.i_x(), self.Fillet_Triangle.area(), 
+                                             self.Fillet_Triangle.centroid()[1]) \
+                   - self.Fillet_Sector.i_x()
         return self.I_x
 
     def i_y(self):
-        I_y_triagles_axis = 2 * (self.Fillet_Triangle.i_y() + self.Fillet_Triangle.area() * self.Fillet_Triangle.centroid()[0] ** 2)
-        I_y_sector_axis = self.Fill
+        i_y_triangles_axis = 2 * parallel_axis_transform_i(self.Fillet_Triangle.i_y(), self.Fillet_Triangle.area(),
+                                                      self.Fillet_Triangle.centroid()[0])
+        i_y_sector_axis = parallel_axis_transform_i(self.Fillet_Sector.i_y(), self.Fillet_Sector.area(),
+                                                    self.Fillet_Triangle.Base - self.Fillet_Sector.centroid())
+        i_y_axis = i_y_triangles_axis - i_y_sector_axis
+        self.I_y = parallel_axis_transform_i(i_y_axis, -self.area(), self.centroid()[0])#note: negative area is imp
         return self.I_y
 
     def r_x(self):
