@@ -193,10 +193,10 @@ class Triangle(Section):
         return self.Zp_y
 
 
-class Fillet(Section):
+class Sector(Section):
 
     def __init__(self, radius, angle):
-        super(Fillet, self).__init__()
+        super(Sector, self).__init__()
         self.Radius = radius
         self.Angle = angle
 
@@ -204,26 +204,59 @@ class Fillet(Section):
         repr = "Fillet\n"
         repr += "Radius: {}\n".format(self.Radius)
         repr += "Angle: {}\n".format(self.Angle)
-        repr += super(Fillet, self).__repr__()
+        repr += super(Sector, self).__repr__()
+        return repr
+
+    def area(self):
+        self.Area = self.Radius**2 * self.Angle / 2
+        return self.Area
+
+    def centroid(self):
+        self.Centroid = (4/3 * self.Radius * math.sin(self.Angle/2)/self.Angle, 0)
+        return self.Centroid
+
+    def i_y(self):
+        self.I_y = self.Radius**4 / 8 * (self.Angle + math.sin(self.Angle)) - self.area()*self.centroid()[0]**2
+        return self.I_y
+
+    def i_x(self):
+        self.I_x = self.Radius**4 / 8 * (self.Angle - math.sin(self.Angle))
+        return self.I_x
+
+
+class Fillet(Sector, Triangle):
+
+    def __init__(self, radius, angle):
+        Section.__init__()  # How to use super here?
+        self.Radius = radius
+        self.Angle = angle
+        self.Fillet_Sector = Sector(self.Radius, math.pi - self.Angle)
+        self.Fillet_Triangle = Triangle(self.Radius/math.sin(self.Angle/2), self.Radius*math.cos(self.Angle/2), self.Angle/2)
+
+    def __repr__(self):
+        repr = "Fillet\n"
+        repr += "Radius: {}\n".format(self.Radius)
+        repr += "Angle: {}\n".format(self.Angle)
+        repr += Section.__repr__()  # How to use super here?
         return repr
 
     def centroid(self):
-        self.Centroid = ((self.Base + (self.Height / math.tan(self.Angle)))/3, self.Height/3)
+        cx = 2 * self.Fillet_Triangle.area() * self.Fillet_Triangle.centroid()[0] - self.Fillet_Sector.area() * \
+             (self.Fillet_Triangle.Base - self.Fillet_Sector.centroid()[0])
+        self.Centroid = (cx, 0)
         return self.Centroid
 
     def area(self):
-        self.Area = self.Radius**2 * (1 / math.tan(self.Angle/2) - (math.pi - self.Angle)/2)
+        self.Area = 2 * self.Fillet_Triangle.area() - self.Fillet_Sector.area()
         return self.Area
 
     def i_x(self):
-        self.I_x = self.Base * self.Height**3 / 36
+        self.I_x = 2 * (self.Fillet_Triangle.i_x() + self.Fillet_Triangle.area() *self.Fillet_Triangle.centroid()[1]**2) - self.Fillet_Sector.i_x()
         return self.I_x
 
     def i_y(self):
-        b = self.Base
-        h = self.Height
-        a = self.Height / math.tan(self.Angle)
-        self.I_y = (b**3 * h - b**2 * h * a + b * h * a**2)/36
+        I_y_triagles_axis = 2 * (self.Fillet_Triangle.i_y() + self.Fillet_Triangle.area() * self.Fillet_Triangle.centroid()[0] ** 2)
+        I_y_sector_axis = self.Fill
         return self.I_y
 
     def r_x(self):
