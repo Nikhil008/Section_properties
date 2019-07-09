@@ -212,7 +212,7 @@ class Fillet(Section):
         return self.Centroid
 
     def area(self):
-        self.Area = self.Base * self.Height / 2
+        self.Area = self.Radius**2 * (1 / math.tan(self.Angle/2) - (math.pi - self.Angle)/2)
         return self.Area
 
     def i_x(self):
