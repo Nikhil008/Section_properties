@@ -14,6 +14,11 @@ def rotational_transform_i(i_x, i_y, i_xy, phi):
 
 
 def calc_centroid(areas, coordinates):
+    """
+    :param areas: list of areas of composing shapes
+    :param coordinates: list of either x or y coordinates of  centroids of respective shapes
+    :return: x/y coordinate of  centroid of composite shape
+    """
     areas = np.array([areas])
     coordinates = np.array([coordinates])
     return sum(areas * coordinates)
@@ -339,10 +344,10 @@ class Fillet(Section):
     """
 
 
-class ISMB_section(Section):
+class I_section(Section):
 
     def __init__(self, d, b, tf, tw, r1, r2, angle):
-        super(ISMB_section, self).__init__()  # How to use super here?
+        super(I_section, self).__init__()  # How to use super here?
         self.D = d
         self.B = b
         self.T = tf
@@ -358,8 +363,8 @@ class ISMB_section(Section):
         self.Triangle_1 = Triangle((self.B - self.t)/2, self.T + h/2, math.pi/2)
 
     def __repr__(self):
-        repr = "ISMB\n"
-        repr += super(ISMB_section, self).__repr__()  # How to use super here?
+        repr = "I\n"
+        repr += super(I_section, self).__repr__()  # How to use super here?
         return repr
 
     def centroid(self):
@@ -426,9 +431,13 @@ class ISMB_section(Section):
         return self.R_y
 
     def ze_x(self):
+        y_max = self.Rectangle_2.Breadth + self.Rectangle_1.Breadth/2
+        self.Ze_x = self.i_x()/y_max
         return self.Ze_x
 
     def ze_y(self):
+        x_max = self.Rectangle_2.Length/2
+        self.Ze_y = self.i_y()/x_max
         return self.Ze_y
 
     def zp_x(self):
